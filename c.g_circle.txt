@@ -1,0 +1,86 @@
+#include<windows.h>
+#include<GL/glut.h>
+#include<math.h>
+const float steps = 50;
+const float angle = 3.15 * 2.f / steps;
+void draw();
+float width, height;
+
+void reshape(int, int);
+void background();
+int main(int argc, char** argv) {
+	//glutinit
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
+	//end of glutinit
+	width = GetSystemMetrics(SM_CXSCREEN);
+	height = GetSystemMetrics(SM_CYSCREEN);
+	glutInitWindowSize(width, height);
+	//create window
+	//glutInitWindowSize(400, 400);
+	//glutInitWindowPosition(10, 10);
+
+	glutCreateWindow("circle");
+	//end
+	glutDisplayFunc(draw);
+	glutReshapeFunc(reshape);
+	background();
+	glutMainLoop();
+
+
+
+
+}
+void draw() {
+	glClear(GL_COLOR_BUFFER_BIT);
+	glLoadIdentity();
+	float xpos = 0;
+	float ypos = 0;
+	float radius = 4.0f;
+	float prevx = xpos;
+	float prevy = ypos - radius;
+	for (int i = 0; i <= steps; i++) {
+		float newx = 3.8 * sin(angle * i);
+		float newy = -radius * cos(angle * i);
+		glBegin(GL_TRIANGLES);
+		glColor3f(0, 1, 0);
+		glVertex2f(0.0f, 0.0f);
+		glVertex2f(prevx, prevy);
+		glVertex2f(newx, newy);
+		prevx = newx;
+		prevy = newy;
+		glEnd();
+		glFlush();
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+void reshape(int w, int h) {
+	float ratio;
+	if (h == 0)
+		h == 1;
+	ratio = (float)w / h;
+
+	glViewport(0, 0, w, h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	if (w >= h)
+		gluOrtho2D(-10 * ratio, 10 * ratio, -10, 10);
+	else
+		gluOrtho2D(-10, 10, -10 / ratio, 10 / ratio);
+	glMatrixMode(GL_MODELVIEW);
+}
+void background() {
+	glClearColor(0, 0.4, 1, 0);
+}

@@ -1,0 +1,108 @@
+#include<windows.h>
+#include<GL/glut.h>
+void draw();
+float width;
+float height;
+
+void reshape(int, int);
+void background();
+int main(int argc, char** argv) {
+
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+
+	width = GetSystemMetrics(SM_CXSCREEN);
+	height = GetSystemMetrics(SM_CYSCREEN);
+
+	glutInitWindowSize(width, height);
+
+
+	glutCreateWindow("moving triangles");
+
+	glutDisplayFunc(draw);
+	glutReshapeFunc(reshape);
+	background();
+
+	glutMainLoop();
+
+
+
+
+}
+float x_position = 0.0;
+float y_position = 0.0;
+int state = 1;
+void draw() {
+
+	glClear(GL_COLOR_BUFFER_BIT);
+	glLoadIdentity();
+	glLineWidth(3);
+	glTranslatef(-4, 4, 0);
+	glBegin(GL_LINES);
+	glColor3f(1, 0, 0);
+	glVertex2f(0, 0);
+	glVertex2f(4, -4);
+	
+	glEnd();
+	glLoadIdentity();
+	glTranslatef(4, 4, 0);
+	glBegin(GL_LINES);
+	glColor3f(1, 0, 0);
+	glVertex2f(0, 0);
+	glVertex2f(-4, -4);
+
+	glEnd();
+	glLoadIdentity();
+	glTranslatef(6, -2, 0);
+	glBegin(GL_LINES);
+	glColor3f(1, 0, 0);
+	glVertex2f(0, 0);
+	glVertex2f(-6, 2);
+	glVertex2f(0, 0);
+	glVertex2f(-2, -3);
+	glEnd();
+
+	glLoadIdentity();
+	
+	glTranslatef(-6, -2, 0);
+	glBegin(GL_LINES);
+	glColor3f(1, 0, 0);
+	glVertex2f(0, 0);
+	glVertex2f(6, 2);
+	glVertex2f(0, 0);
+	glVertex2f(2, -3);
+	glEnd();
+	glLoadIdentity();
+
+	glTranslatef(0, -6, 0);
+	glBegin(GL_LINES);
+	glColor3f(1, 0, 0);
+	glVertex2f(0, 0);
+	glVertex2f(0, 6);
+	glVertex2f(0, 0);
+	glVertex2f(2, -3);
+	glVertex2f(0, 0);
+	glVertex2f(-2, -3);
+	glEnd();
+	glutSwapBuffers();
+	
+}
+void reshape(int w, int h) {
+	float ratio;
+	if (h == 0)
+		h == 1;
+	ratio = (float)w / h;
+
+	glViewport(0, 0, w, h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	if (w >= h)
+		gluOrtho2D(-20 * ratio, 20 * ratio, -20, 20);
+	else
+		gluOrtho2D(-20, 20, -20 / ratio, 20 / ratio);
+	glMatrixMode(GL_MODELVIEW);
+
+}
+void background() {
+	glClearColor(0.3, 0.4, 1, 0);
+}

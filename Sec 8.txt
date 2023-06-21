@@ -1,0 +1,89 @@
+#include<Windows.h>
+#include<glut.h>
+
+struct point {
+	GLdouble x, y;
+};
+
+float width, height;
+void display();
+void reshape(int, int);
+void backGround();
+void drawLine();
+
+int main(int argc, char** argv) {
+
+	// glut init
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
+
+	// craete window
+	width = GetSystemMetrics(SM_CXSCREEN);
+	height = GetSystemMetrics(SM_CYSCREEN);
+	glutInitWindowSize(width, height);
+	glutCreateWindow("First Section");
+	/// glutFullScreen();
+
+	// call back functions
+	glutDisplayFunc(display);
+	glutReshapeFunc(reshape);
+	backGround();
+
+	// main loop
+	glutMainLoop();
+}
+
+
+void display() {
+	glClear(GL_COLOR_BUFFER_BIT);
+	glLoadIdentity();
+	glEnable(GL_POINT_SMOOTH);
+	glPointSize(10);
+
+	glBegin(GL_POINTS);
+	glColor3f(1, 0, 0);
+	drawLine();
+	glEnd();
+
+	glFlush();
+}
+
+void reshape(int width, int height) {
+	float ratio;
+	int size = 30;
+	if (!height)height = 1;
+	ratio = width / (height * 1.0);
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	if (width >= height)gluOrtho2D(-size * ratio, size * ratio, -size, size); // decrease width
+	else gluOrtho2D(-size, size, -size / ratio, size / ratio); // increase height
+	glMatrixMode(GL_MODELVIEW);
+}
+
+void backGround() {
+	glClearColor(0.5, 0.4, 1, 0);
+}
+
+void drawLine() {
+	point start, end;
+	start.x = 20, start.y = 10;
+	end.x = 30, end.y = 18;
+	GLdouble dx = end.x - start.x;
+	GLdouble dy = end.y - start.y;
+	GLdouble Pk = (2 * dy) - dx;
+	GLdouble cnt = dx;
+	glVertex2d(start.x, start.y);
+	while ((start.x != end.x && start.y != end.y) || cnt) {
+		if (Pk < 0) {
+			Pk += (2 * dy);
+			start.x++;
+		}
+		else {
+			Pk += (2 * dy) - (2 * dx);
+			start.x++, start.y++;
+		}
+		cnt--;
+		glVertex2d(start.x, start.y);
+	}
+}

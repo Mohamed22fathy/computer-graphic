@@ -1,0 +1,73 @@
+void drawString()
+{
+	if (z >= 50)
+	{
+		char win[] = "You Won";
+		glColor3f(0, 0, 0);
+		glRasterPos3f(35, 0, 0.0);
+		y20 = y2 = y3 = y4 = y5 = y6 = y7 = y8 = -35;
+		for (int j = 0; win[j] != '\0'; j++)
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, win[j]);
+		Lose = true;
+	}
+
+	else if (y20 <= -40 && y2 <= -40 && y3 <= -40 && y4 <= -40
+		&& y5 <= -40 && y6 <= -40 && y7 <= -40 && y8 <= -40)
+	{
+		char c[] = "You Lost";
+		glColor3f(0, 0, 0);
+		glRasterPos3f(35, 0, 0.0);
+		for (int i = 0; c[i] != '\0'; i++)
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c[i]);
+		Lose = true;
+	}
+
+	glColor3f(0, 0, 0);
+	glRasterPos3f(-40, 0, 0.0);
+	char c[] = "Your Score is: ";
+	int i;
+	for (i = 0; c[i] != '\0'; i++)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c[i]);
+	}
+	if (score >= 10)
+		score = 0;
+
+	if (z >= 10 && z < 20)
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, '1');
+
+	else if (z >= 20 && z < 30)
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, '2');
+
+	else if (z >= 30 && z < 40)
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, '3');
+
+	else if (z >= 40 && z < 50)
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, '4');
+
+	else if (z >= 50)
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, '5');
+
+	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, 48 + char(score));
+
+}
+
+//Mouse TO Stop and start again game
+void mouse(int button, int state, int x, int y) {
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		if (Stop == false)
+		{
+			Stop = true;
+		}
+		else if(Stop == true)
+		{
+			Stop = false;
+		}
+	}
+	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN && Lose) {
+		y20 = 30; y2 = 28; y3 = 40; y4 = 38; y5 = 60; y6 = 62; y7 = 30; y8 = 28;
+		Lose = false;
+		score = 0;
+		z = 0;
+	}
+}
